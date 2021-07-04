@@ -26,7 +26,7 @@ func main() {
 			log.Fatalln("Couldn't make builder:", err)
 		}
 
-		createRestartDialog(app, builder)
+		// createRestartDialog(app, builder)
 
 		obj, _ := builder.GetObject("window")
 		wnd := obj.(*gtk.Window)
@@ -41,7 +41,7 @@ func createRestartDialog(app *gtk.Application, builder *gtk.Builder) {
 	window := winObj.(*gtk.Window)
 
 	optionsObj, _ := builder.GetObject("restart")
-	options := optionsObj.(*gtk.Button)
+	options := optionsObj.(*gtk.MenuItem)
 
 	_ = options.Connect("clicked", func() {
 		dialog := gtk.MessageDialogNew(
