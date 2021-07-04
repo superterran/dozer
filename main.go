@@ -1,16 +1,24 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 
+	"github.com/gotk3/gotk3/cairo"
+	"github.com/gotk3/gotk3/gdk"
 	"github.com/gotk3/gotk3/glib"
 
 	"github.com/gotk3/gotk3/gtk"
 )
 
 const gladeTemplateFilename string = "main.glade"
+
+const (
+	KEY_LEFT  uint = 65361
+	KEY_UP    uint = 65362
+	KEY_RIGHT uint = 65363
+	KEY_DOWN  uint = 65364
+)
 
 func main() {
 	const appID = "com.github.superterran.dozer"
@@ -28,6 +36,7 @@ func main() {
 
 		createRestartDialog(app, builder)
 		createCloseDialog(app, builder)
+		createDrawArea(app, builder)
 
 		obj, _ := builder.GetObject("window")
 		wnd := obj.(*gtk.Window)
@@ -35,68 +44,38 @@ func main() {
 		app.AddWindow(wnd)
 	})
 	app.Run(os.Args)
-}
-
-func createRestartDialog(app *gtk.Application, builder *gtk.Builder) {
-	winObj, _ := builder.GetObject("window")
-	window := winObj.(*gtk.Window)
-
-	optionsObj, _ := builder.GetObject("restart")
-	options := optionsObj.(*gtk.MenuItem)
-
-	_ = options.Connect("activate", func() {
-		dialog := gtk.MessageDialogNew(
-			window,               //Specify the parent window
-			gtk.DIALOG_MODAL,     //Modal dialog
-			gtk.MESSAGE_QUESTION, //Specify the dialog box type
-			gtk.BUTTONS_YES_NO,   //Default button
-			"Are you sure you want to restart the level?") //Set content
-
-		dialog.SetTitle("Restart Level") //Dialog box setting title
-
-		flag := dialog.Run() //Run dialog
-		if flag == gtk.RESPONSE_YES {
-			fmt.Println("Press yes")
-		} else if flag == gtk.RESPONSE_NO {
-			fmt.Println("Press no")
-		} else {
-			fmt.Println("Press the close button")
-		}
-
-		dialog.Destroy() //Destroy the dialog
-
-	})
 
 }
 
-func createCloseDialog(app *gtk.Application, builder *gtk.Builder) {
+func createDrawArea(app *gtk.Application, builder *gtk.Builder) {
+
+	// Data
+	unitSize := 20.0
+	x := 0.0
+	y := 0.0
+	keyMap := map[uint]func(){
+		KEY_LEFT:  func() { x-- },
+		KEY_UP:    func() { y-- },
+		KEY_RIGHT: func() { x++ },
+		KEY_DOWN:  func() { y++ },
+	}
+
 	winObj, _ := builder.GetObject("window")
 	window := winObj.(*gtk.Window)
 
-	optionsObj, _ := builder.GetObject("exit")
-	options := optionsObj.(*gtk.MenuItem)
+	optionsObj, _ := builder.GetObject("drawarea")
+	da := optionsObj.(*gtk.DrawingArea)
 
-	_ = options.Connect("activate", func() {
-		dialog := gtk.MessageDialogNew(
-			window,                                  //Specify the parent window
-			gtk.DIALOG_MODAL,                        //Modal dialog
-			gtk.MESSAGE_QUESTION,                    //Specify the dialog box type
-			gtk.BUTTONS_YES_NO,                      //Default button
-			"Are you sure you want to close Dozer?") //Set content
-
-		dialog.SetTitle("Exit Dozer") //Dialog box setting title
-
-		flag := dialog.Run() //Run dialog
-		if flag == gtk.RESPONSE_YES {
-			os.Exit(0)
-		} else if flag == gtk.RESPONSE_NO {
-			fmt.Println("Press no")
-		} else {
-			fmt.Println("Press the close button")
-		}
-
-		dialog.Destroy() //Destroy the dialog
-
+	da.Connect("draw", func(da *gtk.DrawingArea, cr *cairo.Context) {
+		cr.SetSourceRGB(0, 0, 0)
+		cr.Rectangle(x*unitSize, y*unitSize, unitSize, unitSize)
+		cr.Fill()
 	})
-
+	window.Connect("key-press-event", func(win *gtk.Window, ev *gdk.Event) {
+		keyEvent := &gdk.EventKey{ev}
+		if move, found := keyMap[keyEvent.KeyVal()]; found {
+			move()
+			win.QueueDraw()
+		}
+	})
 }
