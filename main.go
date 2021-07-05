@@ -21,11 +21,14 @@ const (
 )
 
 func main() {
+
 	const appID = "com.github.superterran.dozer"
 	app, err := gtk.ApplicationNew(appID, glib.APPLICATION_FLAGS_NONE)
 	if err != nil {
 		log.Fatalln("Couldn't create app:", err)
 	}
+
+	LoadMap("level1.yaml")
 
 	app.Connect("activate", func() {
 
@@ -50,9 +53,10 @@ func main() {
 func createDrawArea(app *gtk.Application, builder *gtk.Builder) {
 
 	// Data
-	unitSize := 20.0
+
 	x := 0.0
 	y := 0.0
+
 	keyMap := map[uint]func(){
 		KEY_LEFT:  func() { x-- },
 		KEY_UP:    func() { y-- },
@@ -67,9 +71,9 @@ func createDrawArea(app *gtk.Application, builder *gtk.Builder) {
 	da := optionsObj.(*gtk.DrawingArea)
 
 	da.Connect("draw", func(da *gtk.DrawingArea, cr *cairo.Context) {
-		cr.SetSourceRGB(0, 0, 0)
-		cr.Rectangle(x*unitSize, y*unitSize, unitSize, unitSize)
-		cr.Fill()
+
+		drawLevel(da, cr)
+
 	})
 	window.Connect("key-press-event", func(win *gtk.Window, ev *gdk.Event) {
 		keyEvent := &gdk.EventKey{ev}
@@ -79,3 +83,7 @@ func createDrawArea(app *gtk.Application, builder *gtk.Builder) {
 		}
 	})
 }
+
+var playerX int
+var playerY int
+var isSpawned bool = false
