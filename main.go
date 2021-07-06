@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"os"
 
 	"github.com/gotk3/gotk3/cairo"
@@ -28,7 +27,11 @@ var origY int = 0.00
 
 var isSpawned bool = false
 
-var currentLevelName string
+var currentLevelName string = "levels/level1.yaml"
+
+var app *gtk.Application
+
+var builder *gtk.Builder
 
 const gladeTemplateFilename string = "main.glade"
 
@@ -42,24 +45,20 @@ const (
 func main() {
 
 	const appID = "com.github.superterran.dozer"
-	app, err := gtk.ApplicationNew(appID, glib.APPLICATION_FLAGS_NONE)
-	if err != nil {
-		log.Fatalln("Couldn't create app:", err)
-	}
+	app, _ = gtk.ApplicationNew(appID, glib.APPLICATION_FLAGS_NONE)
 
-	LoadLevel("level1.yaml")
+	if _, err := os.Stat(currentLevelName); os.IsExist(err) {
+		LoadLevel(currentLevelName)
+	}
 
 	app.Connect("activate", func() {
 
-		builder, err := gtk.BuilderNewFromFile(gladeTemplateFilename)
-		if err != nil {
-			log.Fatalln("Couldn't make builder:", err)
-		}
+		builder, _ = gtk.BuilderNewFromFile(gladeTemplateFilename)
 
-		createLoadDialog(app, builder)
-		createRestartDialog(app, builder)
-		createCloseDialog(app, builder)
-		createDrawArea(app, builder)
+		createLoadDialog()
+		createRestartDialog()
+		createCloseDialog()
+		createDrawArea()
 
 		obj, _ := builder.GetObject("window")
 		wnd := obj.(*gtk.Window)
@@ -73,7 +72,7 @@ func main() {
 
 }
 
-func createDrawArea(app *gtk.Application, builder *gtk.Builder) {
+func createDrawArea() {
 
 	keyMap := map[uint]func(){
 		KEY_LEFT: func() {

@@ -8,7 +8,7 @@ import (
 	"github.com/gotk3/gotk3/gtk"
 )
 
-func createLoadDialog(app *gtk.Application, builder *gtk.Builder) {
+func createLoadDialog() {
 	winObj, _ := builder.GetObject("window")
 	win := winObj.(*gtk.Window)
 
@@ -38,7 +38,7 @@ func createLoadDialog(app *gtk.Application, builder *gtk.Builder) {
 
 }
 
-func createRestartDialog(app *gtk.Application, builder *gtk.Builder) {
+func createRestartDialog() {
 	winObj, _ := builder.GetObject("window")
 	window := winObj.(*gtk.Window)
 
@@ -67,7 +67,7 @@ func createRestartDialog(app *gtk.Application, builder *gtk.Builder) {
 
 }
 
-func createCloseDialog(app *gtk.Application, builder *gtk.Builder) {
+func createCloseDialog() {
 	winObj, _ := builder.GetObject("window")
 	window := winObj.(*gtk.Window)
 
