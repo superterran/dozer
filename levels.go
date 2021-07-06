@@ -7,9 +7,15 @@ import (
 	"github.com/spf13/viper"
 )
 
-var Level *viper.Viper
+var LevelString string
 
-var Tiles map[string]interface{}
+var LevelMap [255][255]string
+
+var width int = 0
+
+var height int = 0
+
+var Level *viper.Viper
 
 func LoadMap(levelName string) {
 
@@ -26,8 +32,6 @@ func LoadMap(levelName string) {
 
 	LevelString = Level.GetString("level")
 
-	fmt.Println(levelName + " is loaded")
-
 	rows := strings.Split(LevelString, "\n")
 	for y, row := range rows {
 		col := strings.Split(row, "")
@@ -39,11 +43,6 @@ func LoadMap(levelName string) {
 		}
 	}
 
+	fmt.Println(levelName + " is loaded")
+
 }
-
-var LevelString string
-
-var LevelMap [255][255]string
-
-var width int = 0
-var height int = 0

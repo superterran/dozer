@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 
@@ -11,6 +10,10 @@ import (
 
 	"github.com/gotk3/gotk3/gtk"
 )
+
+var playerX int = 0.00
+var playerY int = 0.00
+var isSpawned bool = false
 
 const gladeTemplateFilename string = "main.glade"
 
@@ -56,8 +59,6 @@ func main() {
 
 func createDrawArea(app *gtk.Application, builder *gtk.Builder) {
 
-	// Data
-
 	keyMap := map[uint]func(){
 		KEY_LEFT:  func() { playerX-- },
 		KEY_UP:    func() { playerY-- },
@@ -80,33 +81,18 @@ func createDrawArea(app *gtk.Application, builder *gtk.Builder) {
 		keyEvent := &gdk.EventKey{ev}
 		if move, found := keyMap[keyEvent.KeyVal()]; found {
 
-			// if playerX >= 0 && playerY >= 0 {
-
 			origX := playerX
 			origY := playerY
 
 			move()
 
 			if !isPositionOccupied(int(playerX), int(playerY)) {
-
 				movePlayer(origX, origY, playerX, playerY)
-
-				fmt.Println("broom")
 				win.QueueDraw()
 			} else {
-				fmt.Println("bump")
 				playerX = origX
 				playerY = origY
 			}
-			//
-
-			fmt.Println(playerX, playerY)
-
 		}
 	})
-
 }
-
-var playerX int = 0.00
-var playerY int = 0.00
-var isSpawned bool = false

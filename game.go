@@ -5,7 +5,7 @@ import (
 	"github.com/gotk3/gotk3/gtk"
 )
 
-var unitSize int = 20
+var unitSize int = 30
 
 func drawLevel(da *gtk.DrawingArea, cr *cairo.Context) {
 
@@ -31,6 +31,8 @@ func drawLevel(da *gtk.DrawingArea, cr *cairo.Context) {
 				cr.SetSourceRGB(255, 0, 0)
 			case "*":
 				cr.SetSourceRGB(0, 255, 0)
+			case "o":
+				cr.SetSourceRGB(0, 0, 0)
 			case " ":
 				cr.SetSourceRGB(255, 255, 255)
 			case "S":
