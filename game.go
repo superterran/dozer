@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/gotk3/gotk3/cairo"
 	"github.com/gotk3/gotk3/gtk"
 )
@@ -22,6 +24,10 @@ func drawLevel(da *gtk.DrawingArea, cr *cairo.Context) {
 			if char == "S" && !isSpawned { // S is the maps spawn point
 				playerX = x
 				playerY = y
+
+				frontX = x
+				frontY = y
+
 				// char = " "
 				isSpawned = true
 			}
@@ -49,11 +55,59 @@ func drawLevel(da *gtk.DrawingArea, cr *cairo.Context) {
 	}
 }
 
-func isPositionOccupied(x int, y int) bool {
-	return LevelMap[int(y)][int(x)] != " " && LevelMap[int(y)][int(x)] != "S"
+func isPushable() bool {
+
+	// check to see if pushable area is even in bounds
+	// if pushX <= 0 && pushY <= 0 {
+
+	// 	if pushX <= width && pushY >= height {
+	// 		// if in bounds, check to see if bulldozer is pushing a rock
+
+	fmt.Println("Test")
+	fmt.Println(getChar(playerX, playerY))
+
+	if getChar(playerX, playerY) == "x" {
+		// if it is a rock, check to see if pushable area is free for a rock
+		fmt.Println("pushable?")
+
+		if getChar(frontX, frontY) == " " || getChar(frontX, frontY) == "o" {
+
+			fmt.Println("pushable!")
+			return true
+		}
+	}
+
+	// 	}
+	// }
+	return false
+}
+
+func isMovable(x int, y int) bool {
+	return getChar(x, y) != " " && getChar(x, y) != "S"
+}
+
+func getChar(x int, y int) string {
+	return LevelMap[int(y)][int(x)]
+}
+
+func setChar(x int, y int, char string) {
+	LevelMap[int(y)][int(x)] = char
 }
 
 func movePlayer(origX int, origY int, newX int, newY int) {
 	LevelMap[origY][origX] = " "
 	LevelMap[newY][newX] = "S"
+}
+
+func push() {
+
+	fmt.Println("pushed")
+	setChar(playerX, playerY, "S")
+
+	if getChar(frontX, frontY) == "o" {
+		setChar(frontX, frontY, "o")
+	} else {
+		setChar(frontX, frontY, "x")
+	}
+
 }

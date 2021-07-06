@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 
@@ -11,8 +12,18 @@ import (
 	"github.com/gotk3/gotk3/gtk"
 )
 
+// the bulldozer coordinates
 var playerX int = 0.00
 var playerY int = 0.00
+
+// front of the bulldozer, for comparion purposes
+var frontX int = 0.00
+var frontY int = 0.00
+
+// push location
+var pushX int = 0.00
+var pushY int = 0.00
+
 var isSpawned bool = false
 
 const gladeTemplateFilename string = "main.glade"
@@ -60,10 +71,31 @@ func main() {
 func createDrawArea(app *gtk.Application, builder *gtk.Builder) {
 
 	keyMap := map[uint]func(){
-		KEY_LEFT:  func() { playerX-- },
-		KEY_UP:    func() { playerY-- },
-		KEY_RIGHT: func() { playerX++ },
-		KEY_DOWN:  func() { playerY++ },
+		KEY_LEFT: func() {
+			playerX--
+			frontX = playerX - 1
+			frontY = playerY
+			frontY = playerY
+
+		},
+		KEY_UP: func() {
+			playerY--
+			frontY = playerY - 1
+			frontX = playerX
+			frontX = playerX
+		},
+		KEY_RIGHT: func() {
+			playerX++
+			frontX = playerX + 1
+			frontY = playerY
+			frontY = playerY
+		},
+		KEY_DOWN: func() {
+			playerY++
+			frontY = playerY + 1
+			frontX = playerX
+			frontX = playerX
+		},
 	}
 
 	winObj, _ := builder.GetObject("window")
@@ -81,15 +113,22 @@ func createDrawArea(app *gtk.Application, builder *gtk.Builder) {
 		keyEvent := &gdk.EventKey{ev}
 		if move, found := keyMap[keyEvent.KeyVal()]; found {
 
+			fmt.Println(playerX, playerY, frontX, frontY)
+
 			origX := playerX
 			origY := playerY
 
 			move()
 
-			if !isPositionOccupied(int(playerX), int(playerY)) {
+			if !isMovable(int(playerX), int(playerY)) {
 				movePlayer(origX, origY, playerX, playerY)
 				win.QueueDraw()
 			} else {
+
+				if isPushable() {
+					push()
+				}
+
 				playerX = origX
 				playerY = origY
 			}

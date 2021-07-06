@@ -37,7 +37,7 @@ func LoadMap(levelName string) {
 		col := strings.Split(row, "")
 		for x, char := range col {
 			LevelMap[y][x] = char
-			fmt.Println(x, y, char)
+
 			width = x
 			height = y
 		}
