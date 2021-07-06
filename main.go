@@ -27,7 +27,7 @@ var origY int = 0.00
 
 var isSpawned bool = false
 
-var currentLevelName string = "levels/level1.yaml"
+var currentLevelName string = "level1.yaml"
 
 var app *gtk.Application
 
@@ -47,8 +47,12 @@ func main() {
 	const appID = "com.github.superterran.dozer"
 	app, _ = gtk.ApplicationNew(appID, glib.APPLICATION_FLAGS_NONE)
 
-	if _, err := os.Stat(currentLevelName); os.IsExist(err) {
-		LoadLevel(currentLevelName)
+	path, _ := os.Getwd()
+
+	if _, err := os.Stat(path + "/levels/" + currentLevelName); !os.IsNotExist(err) {
+
+		LoadLevel(path + "/levels/" + currentLevelName)
+
 	}
 
 	app.Connect("activate", func() {
