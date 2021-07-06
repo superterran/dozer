@@ -1,0 +1,6 @@
+# .goreleaser.yml
+builds:
+  - 
+    ignore:
+    - goos: linux
+      goarch: 386
