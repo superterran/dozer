@@ -8,3 +8,5 @@ builds:
       goarch: arm
     - goos: linux
       goarch: arm64
+    - goos: darwin
+      goarch: amd64
