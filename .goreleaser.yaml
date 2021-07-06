@@ -5,4 +5,6 @@ builds:
     - goos: linux
       goarch: 386
     - goos: linux
-      goarch: arm      
+      goarch: arm
+    - goos: linux
+      goarch: arm64
