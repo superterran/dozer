@@ -1,5 +1,5 @@
 ---
-name: Basic Level
+name: Another Basic Level
 level: |
   ********************
   *                  *
@@ -8,17 +8,17 @@ level: |
   *      * o *       *
   *      *   *       *
   *      * x *       *
-  *      *   *       *
-  *      *   *       *
-  *                  *
-  *                  *
   *                  *
   *                  *
   *        S         *
   *                  *
-  *                  *
+  * *****     ****** *
+  * *              * *
+  * * o x     x  o * *
+  * *              * *  
+  * *****     ****** *
   *                  *
   *                  *
   *                  *  
   ********************
-next: level2.yaml
+next: level1.yaml

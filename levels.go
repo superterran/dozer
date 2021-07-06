@@ -30,6 +30,8 @@ func LoadMap(levelName string) {
 		panic(fmt.Errorf("Fatal error config file: %w \n", err))
 	}
 
+	holes = 0
+
 	LevelString = Level.GetString("level")
 
 	rows := strings.Split(LevelString, "\n")
@@ -38,10 +40,16 @@ func LoadMap(levelName string) {
 		for x, char := range col {
 			LevelMap[y][x] = char
 
+			if char == "o" {
+				holes++
+			}
+
 			width = x
 			height = y
 		}
 	}
+
+	isSpawned = false
 
 	fmt.Println(levelName + " is loaded")
 

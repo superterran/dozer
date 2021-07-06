@@ -97,6 +97,7 @@ func movePlayer(origX int, origY int, newX int, newY int) {
 
 func push() {
 
+	fmt.Println(holes)
 	fmt.Println("pushed")
 
 	setChar(origX, origY, " ")
@@ -104,11 +105,14 @@ func push() {
 
 	if getChar(frontX, frontY) == "o" {
 		setChar(frontX, frontY, "o")
+		holes--
 	} else {
 		setChar(frontX, frontY, "x")
 	}
 
-	// frontX = playerX
-	// frontY = playerY
+	if holes == 0 {
+		fmt.Println("you win!")
+		LoadMap(Level.GetString("next"))
+	}
 
 }

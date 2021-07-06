@@ -12,6 +12,8 @@ import (
 	"github.com/gotk3/gotk3/gtk"
 )
 
+var holes int = 0
+
 // the bulldozer coordinates
 var playerX int = 0.00
 var playerY int = 0.00
