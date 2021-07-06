@@ -1,27 +1,24 @@
 package main
 
 import (
-	"strings"
-
 	"github.com/gotk3/gotk3/cairo"
 	"github.com/gotk3/gotk3/gtk"
 )
 
-func drawLevel(da *gtk.DrawingArea, cr *cairo.Context) {
+var unitSize int = 20
 
-	unitSize := 20
+func drawLevel(da *gtk.DrawingArea, cr *cairo.Context) {
 
 	offset := 70
 
-	rows := strings.Split(LevelMap, "\n")
-	for y, row := range rows {
-		col := strings.Split(row, "")
-		for x, char := range col {
+	for y, row := range LevelMap {
+		for x, char := range row {
 
 			if char == "S" && !isSpawned { // S is the maps spawn point
 				playerX = x
 				playerY = y
 				// char = " "
+				isSpawned = true
 			}
 
 			switch char {
@@ -39,4 +36,13 @@ func drawLevel(da *gtk.DrawingArea, cr *cairo.Context) {
 			cr.Fill()
 		}
 	}
+}
+
+func isPositionOccupied(x int, y int) bool {
+	return LevelMap[int(y)][int(x)] != " " && LevelMap[int(y)][int(x)] != "S"
+}
+
+func movePlayer(origX int, origY int, newX int, newY int) {
+	LevelMap[origY][origX] = " "
+	LevelMap[newY][newX] = "S"
 }

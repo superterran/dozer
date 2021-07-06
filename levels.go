@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/spf13/viper"
 )
@@ -23,9 +24,23 @@ func LoadMap(levelName string) {
 		panic(fmt.Errorf("Fatal error config file: %w \n", err))
 	}
 
-	LevelMap = Level.GetString("level")
+	LevelString = Level.GetString("level")
+
 	fmt.Println(levelName + " is loaded")
+
+	rows := strings.Split(LevelString, "\n")
+	for y, row := range rows {
+		col := strings.Split(row, "")
+		for x, char := range col {
+			LevelMap[y][x] = char
+			fmt.Println(x, y, char)
+		}
+	}
+
+	fmt.Println(LevelMap)
 
 }
 
-var LevelMap string
+var LevelString string
+
+var LevelMap [40][40]string

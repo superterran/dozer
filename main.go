@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 
@@ -45,6 +46,9 @@ func main() {
 		wnd := obj.(*gtk.Window)
 		wnd.ShowAll()
 		app.AddWindow(wnd)
+
+		wnd.GetAllocation().GetWidth()
+
 	})
 	app.Run(os.Args)
 
@@ -54,14 +58,11 @@ func createDrawArea(app *gtk.Application, builder *gtk.Builder) {
 
 	// Data
 
-	x := 0.0
-	y := 0.0
-
 	keyMap := map[uint]func(){
-		KEY_LEFT:  func() { x-- },
-		KEY_UP:    func() { y-- },
-		KEY_RIGHT: func() { x++ },
-		KEY_DOWN:  func() { y++ },
+		KEY_LEFT:  func() { playerX-- },
+		KEY_UP:    func() { playerY-- },
+		KEY_RIGHT: func() { playerX++ },
+		KEY_DOWN:  func() { playerY++ },
 	}
 
 	winObj, _ := builder.GetObject("window")
@@ -78,12 +79,34 @@ func createDrawArea(app *gtk.Application, builder *gtk.Builder) {
 	window.Connect("key-press-event", func(win *gtk.Window, ev *gdk.Event) {
 		keyEvent := &gdk.EventKey{ev}
 		if move, found := keyMap[keyEvent.KeyVal()]; found {
+
+			// if playerX >= 0 && playerY >= 0 {
+
+			origX := playerX
+			origY := playerY
+
 			move()
-			win.QueueDraw()
+
+			if !isPositionOccupied(int(playerX), int(playerY)) {
+
+				movePlayer(origX, origY, playerX, playerY)
+
+				fmt.Println("broom")
+				win.QueueDraw()
+			} else {
+				fmt.Println("bump")
+				playerX = origX
+				playerY = origY
+			}
+			//
+
+			fmt.Println(playerX, playerY)
+
 		}
 	})
+
 }
 
-var playerX int
-var playerY int
+var playerX int = 0.00
+var playerY int = 0.00
 var isSpawned bool = false
