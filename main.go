@@ -28,6 +28,8 @@ var origY int = 0.00
 
 var isSpawned bool = false
 
+var currentLevelName string
+
 const gladeTemplateFilename string = "main.glade"
 
 const (

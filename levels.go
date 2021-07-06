@@ -32,6 +32,8 @@ func LoadMap(levelName string) {
 
 	holes = 0
 
+	currentLevelName = levelName
+
 	LevelString = Level.GetString("level")
 
 	rows := strings.Split(LevelString, "\n")

@@ -27,10 +27,7 @@ func createRestartDialog(app *gtk.Application, builder *gtk.Builder) {
 		flag := dialog.Run() //Run dialog
 		if flag == gtk.RESPONSE_YES {
 			fmt.Println("Press yes")
-		} else if flag == gtk.RESPONSE_NO {
-			fmt.Println("Press no")
-		} else {
-			fmt.Println("Press the close button")
+			LoadMap(currentLevelName)
 		}
 
 		dialog.Destroy() //Destroy the dialog
