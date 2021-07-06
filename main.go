@@ -20,9 +20,9 @@ var playerY int = 0.00
 var frontX int = 0.00
 var frontY int = 0.00
 
-// push location
-var pushX int = 0.00
-var pushY int = 0.00
+// orig location
+var origX int = 0.00
+var origY int = 0.00
 
 var isSpawned bool = false
 
@@ -126,7 +126,9 @@ func createDrawArea(app *gtk.Application, builder *gtk.Builder) {
 			} else {
 
 				if isPushable() {
+
 					push()
+					win.QueueDraw()
 				}
 
 				playerX = origX

@@ -21,15 +21,25 @@ func drawLevel(da *gtk.DrawingArea, cr *cairo.Context) {
 
 		for x, char := range row {
 
-			if char == "S" && !isSpawned { // S is the maps spawn point
-				playerX = x
-				playerY = y
+			if char == "S" {
+				if !isSpawned { // S is the maps spawn point
 
-				frontX = x
-				frontY = y
+					origX = x
+					origY = y
 
-				// char = " "
-				isSpawned = true
+					playerX = x
+					playerY = y
+
+					frontX = x
+					frontY = y
+
+					isSpawned = true
+				} else {
+					if playerX != x || playerY != y {
+						char = " "
+					}
+
+				}
 			}
 
 			switch char {
@@ -57,28 +67,14 @@ func drawLevel(da *gtk.DrawingArea, cr *cairo.Context) {
 
 func isPushable() bool {
 
-	// check to see if pushable area is even in bounds
-	// if pushX <= 0 && pushY <= 0 {
-
-	// 	if pushX <= width && pushY >= height {
-	// 		// if in bounds, check to see if bulldozer is pushing a rock
-
-	fmt.Println("Test")
-	fmt.Println(getChar(playerX, playerY))
-
 	if getChar(playerX, playerY) == "x" {
-		// if it is a rock, check to see if pushable area is free for a rock
-		fmt.Println("pushable?")
 
 		if getChar(frontX, frontY) == " " || getChar(frontX, frontY) == "o" {
 
-			fmt.Println("pushable!")
 			return true
 		}
 	}
 
-	// 	}
-	// }
 	return false
 }
 
@@ -102,6 +98,8 @@ func movePlayer(origX int, origY int, newX int, newY int) {
 func push() {
 
 	fmt.Println("pushed")
+
+	setChar(origX, origY, " ")
 	setChar(playerX, playerY, "S")
 
 	if getChar(frontX, frontY) == "o" {
@@ -109,5 +107,8 @@ func push() {
 	} else {
 		setChar(frontX, frontY, "x")
 	}
+
+	// frontX = playerX
+	// frontY = playerY
 
 }
