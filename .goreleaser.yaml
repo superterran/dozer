@@ -4,3 +4,5 @@ builds:
     ignore:
     - goos: linux
       goarch: 386
+    - goos: linux
+      goarch: arm      
