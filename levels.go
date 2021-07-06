@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/spf13/viper"
@@ -17,13 +19,22 @@ var height int = 0
 
 var Level *viper.Viper
 
-func LoadMap(levelName string) {
+func LoadLevel(levelName string) {
 
 	Level = viper.New()
 
-	Level.SetConfigType("yaml") // REQUIRED if the config file does not have the extension in the name
-	Level.AddConfigPath("levels")
-	Level.SetConfigName(levelName)
+	if _, err := os.Stat(levelName); os.IsNotExist(err) {
+		// path/to/whatever does not exist
+		Level.SetConfigType("yaml") // REQUIRED if the config file does not have the extension in the name
+		Level.AddConfigPath("levels")
+		Level.SetConfigName(levelName)
+	} else {
+
+		fmt.Println(levelName)
+		dir := filepath.Dir(levelName)
+		Level.AddConfigPath(dir)
+		Level.SetConfigFile(levelName)
+	}
 
 	err := Level.ReadInConfig() // Find and read the config file
 	if err != nil {             // Handle errors reading the config file

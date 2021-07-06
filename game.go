@@ -112,7 +112,7 @@ func push() {
 
 	if holes == 0 {
 		fmt.Println("you win!")
-		LoadMap(Level.GetString("next"))
+		LoadLevel(Level.GetString("next"))
 	}
 
 }

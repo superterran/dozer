@@ -47,7 +47,7 @@ func main() {
 		log.Fatalln("Couldn't create app:", err)
 	}
 
-	LoadMap("level1.yaml")
+	LoadLevel("level1.yaml")
 
 	app.Connect("activate", func() {
 
@@ -56,6 +56,7 @@ func main() {
 			log.Fatalln("Couldn't make builder:", err)
 		}
 
+		createLoadDialog(app, builder)
 		createRestartDialog(app, builder)
 		createCloseDialog(app, builder)
 		createDrawArea(app, builder)

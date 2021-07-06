@@ -2,10 +2,41 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/gotk3/gotk3/gtk"
 )
+
+func createLoadDialog(app *gtk.Application, builder *gtk.Builder) {
+	winObj, _ := builder.GetObject("window")
+	win := winObj.(*gtk.Window)
+
+	optionsObj, _ := builder.GetObject("load")
+	options := optionsObj.(*gtk.MenuItem)
+
+	_ = options.Connect("activate", func() {
+
+		openDialog, err := gtk.FileChooserDialogNewWith2Buttons("Select files", win, gtk.FILE_CHOOSER_ACTION_OPEN,
+			"Cancel", gtk.RESPONSE_CANCEL, "OK", gtk.RESPONSE_OK)
+		if err != nil {
+			log.Fatal("Dialog creation failed")
+		}
+
+		response := openDialog.Run()
+		if response != gtk.RESPONSE_OK {
+			log.Fatal("Error getting filename")
+		}
+		file := openDialog.GetFilename()
+		openDialog.Destroy()
+
+		fmt.Println(file)
+
+		LoadLevel(file)
+
+	})
+
+}
 
 func createRestartDialog(app *gtk.Application, builder *gtk.Builder) {
 	winObj, _ := builder.GetObject("window")
@@ -27,7 +58,7 @@ func createRestartDialog(app *gtk.Application, builder *gtk.Builder) {
 		flag := dialog.Run() //Run dialog
 		if flag == gtk.RESPONSE_YES {
 			fmt.Println("Press yes")
-			LoadMap(currentLevelName)
+			LoadLevel(currentLevelName)
 		}
 
 		dialog.Destroy() //Destroy the dialog
