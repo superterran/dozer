@@ -34,13 +34,16 @@ func LoadMap(levelName string) {
 		for x, char := range col {
 			LevelMap[y][x] = char
 			fmt.Println(x, y, char)
+			width = x
+			height = y
 		}
 	}
-
-	fmt.Println(LevelMap)
 
 }
 
 var LevelString string
 
-var LevelMap [40][40]string
+var LevelMap [255][255]string
+
+var width int = 0
+var height int = 0

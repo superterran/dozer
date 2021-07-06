@@ -9,9 +9,14 @@ var unitSize int = 20
 
 func drawLevel(da *gtk.DrawingArea, cr *cairo.Context) {
 
-	offset := 70
+	offset := 0
 
 	for y, row := range LevelMap {
+
+		if y > height {
+			break
+		}
+
 		for x, char := range row {
 
 			if char == "S" && !isSpawned { // S is the maps spawn point
@@ -34,6 +39,10 @@ func drawLevel(da *gtk.DrawingArea, cr *cairo.Context) {
 
 			cr.Rectangle(float64(offset+x*unitSize), float64(offset+y*unitSize), float64(unitSize), float64(unitSize))
 			cr.Fill()
+
+			if x == width {
+				break
+			}
 		}
 	}
 }
