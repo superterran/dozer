@@ -4,4 +4,4 @@ pushing around rocks in a gtk golang app
 
 ## References
 
-* [https://github.com/westoncampbell/BulldozerAHK](Windows Port of Bulldozer)
+* [Port of Bulldozer](https://github.com/westoncampbell/BulldozerAHK)
