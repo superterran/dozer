@@ -72,26 +72,15 @@ func drawLevel(da *gtk.DrawingArea, cr *cairo.Context) {
 
 			}
 
-			// cr.IdentityMatrix()
-
-			offset := 0
-			_ = offset
-
-			// cr.Save()
-
 			if tileName != "" {
 				surface, _ := cairo.NewSurfaceFromPNG("sprites/" + tileName)
 				cr.SetSourceSurface(surface, float64(x*unitSize), float64(y*unitSize))
 				cr.Paint()
 
 			} else {
-				cr.Rectangle(float64(offset+x*unitSize), float64(offset+y*unitSize), float64(unitSize), float64(unitSize))
+				cr.Rectangle(float64(x*unitSize), float64(y*unitSize), float64(unitSize), float64(unitSize))
 				cr.Fill()
 			}
-
-			// cr.Clip()
-
-			// cr.Restore()
 
 			if x == width {
 				break
