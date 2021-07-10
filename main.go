@@ -33,6 +33,8 @@ var app *gtk.Application
 
 var builder *gtk.Builder
 
+var playerDirection string = "up"
+
 const gladeTemplateFilename string = "main.glade"
 
 const (
@@ -84,6 +86,7 @@ func createDrawArea() {
 			frontX = playerX - 1
 			frontY = playerY
 			frontY = playerY
+			playerDirection = "left"
 
 		},
 		KEY_UP: func() {
@@ -91,18 +94,21 @@ func createDrawArea() {
 			frontY = playerY - 1
 			frontX = playerX
 			frontX = playerX
+			playerDirection = "up"
 		},
 		KEY_RIGHT: func() {
 			playerX++
 			frontX = playerX + 1
 			frontY = playerY
 			frontY = playerY
+			playerDirection = "right"
 		},
 		KEY_DOWN: func() {
 			playerY++
 			frontY = playerY + 1
 			frontX = playerX
 			frontX = playerX
+			playerDirection = "down"
 		},
 	}
 
@@ -117,6 +123,7 @@ func createDrawArea() {
 		drawLevel(da, cr)
 
 	})
+
 	window.Connect("key-press-event", func(win *gtk.Window, ev *gdk.Event) {
 		keyEvent := &gdk.EventKey{ev}
 		if move, found := keyMap[keyEvent.KeyVal()]; found {

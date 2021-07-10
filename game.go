@@ -11,8 +11,6 @@ var unitSize int = 30
 
 func drawLevel(da *gtk.DrawingArea, cr *cairo.Context) {
 
-	offset := 0
-
 	for y, row := range LevelMap {
 
 		if y > height {
@@ -42,21 +40,58 @@ func drawLevel(da *gtk.DrawingArea, cr *cairo.Context) {
 				}
 			}
 
+			var tileName string = ""
+
 			switch char {
+
+			case " ":
+				// cr.SetSourceRGB(255, 50, 25)
+				tileName = ""
 			case "x":
 				cr.SetSourceRGB(255, 0, 0)
+				tileName = "tile008.png"
 			case "*":
 				cr.SetSourceRGB(0, 255, 0)
+				tileName = "tile001.png"
 			case "o":
 				cr.SetSourceRGB(0, 0, 0)
-			case " ":
-				cr.SetSourceRGB(255, 255, 255)
+				tileName = "tile010.png"
 			case "S":
 				cr.SetSourceRGB(255, 255, 0)
+
+				switch playerDirection {
+				case "up":
+					tileName = "tile012.png"
+				case "down":
+					tileName = "tile013.png"
+				case "left":
+					tileName = "tile014.png"
+				case "right":
+					tileName = "tile011.png"
+				}
+
 			}
 
-			cr.Rectangle(float64(offset+x*unitSize), float64(offset+y*unitSize), float64(unitSize), float64(unitSize))
-			cr.Fill()
+			// cr.IdentityMatrix()
+
+			offset := 0
+			_ = offset
+
+			// cr.Save()
+
+			if tileName != "" {
+				surface, _ := cairo.NewSurfaceFromPNG("sprites/" + tileName)
+				cr.SetSourceSurface(surface, float64(x*unitSize), float64(y*unitSize))
+				cr.Paint()
+
+			} else {
+				cr.Rectangle(float64(offset+x*unitSize), float64(offset+y*unitSize), float64(unitSize), float64(unitSize))
+				cr.Fill()
+			}
+
+			// cr.Clip()
+
+			// cr.Restore()
 
 			if x == width {
 				break

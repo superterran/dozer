@@ -43,7 +43,6 @@
     <property name="resizable">False</property>
     <property name="default-width">600</property>
     <property name="default-height">600</property>
-    <property name="skip-taskbar-hint">True</property>
     <child>
       <object class="GtkDrawingArea" id="drawarea">
         <property name="visible">True</property>
@@ -51,11 +50,11 @@
       </object>
     </child>
     <child type="titlebar">
-      <object class="GtkHeaderBar">
+      <object class="GtkHeaderBar" id="levelname">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="title" translatable="yes">Dozer</property>
-        <property name="subtitle" translatable="yes">Level 1</property>
+        <property name="subtitle" translatable="yes">select a level to start</property>
         <property name="show-close-button">True</property>
         <child>
           <object class="GtkMenuButton" id="options">
